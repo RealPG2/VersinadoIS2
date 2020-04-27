@@ -1,0 +1,132 @@
+-- Generado por Oracle SQL Developer Data Modeler 17.3.0.261.1529
+--   en:        2020-04-27 09:08:21 COT
+--   sitio:      Oracle Database 11g
+--   tipo:      Oracle Database 11g
+
+
+
+CREATE TABLE consultas (
+    id            VARCHAR2(10 CHAR) NOT NULL,
+    ntelefonico   VARCHAR2(10 CHAR) NOT NULL,
+    fechac        DATE,
+    attribute_2   unknown 
+--  ERROR: Datatype UNKNOWN is not allowed 
+   ,
+    cuenta_id     VARCHAR2(10 CHAR) NOT NULL
+);
+
+ALTER TABLE consultas ADD CONSTRAINT consultas_pk PRIMARY KEY ( id,
+cuenta_id );
+
+CREATE TABLE cuenta (
+    id                    VARCHAR2(10 CHAR) NOT NULL,
+    saldo                 VARCHAR2(10 CHAR) NOT NULL,
+    nombre                CLOB,
+    estado                CLOB,
+    usuario_ntelefonico   VARCHAR2(10 CHAR) NOT NULL,
+    empresa_nombre        VARCHAR2(10) NOT NULL
+);
+
+CREATE UNIQUE INDEX cuenta__idx ON
+    cuenta ( usuario_ntelefonico ASC );
+
+ALTER TABLE cuenta ADD CONSTRAINT cuenta_pk PRIMARY KEY ( id );
+
+CREATE TABLE empresa (
+    nombre      VARCHAR2(10) NOT NULL,
+    direccion   CLOB,
+    email       CLOB
+);
+
+ALTER TABLE empresa ADD CONSTRAINT empresa_pk PRIMARY KEY ( nombre );
+
+CREATE TABLE recargar (
+    id            VARCHAR2(10 CHAR) NOT NULL,
+    ntelefonico   VARCHAR2(10 CHAR) NOT NULL,
+    valor         VARCHAR2(10 CHAR),
+    fecha         DATE,
+    cuenta_id     VARCHAR2(10 CHAR) NOT NULL
+);
+
+ALTER TABLE recargar ADD CONSTRAINT recargar_pk PRIMARY KEY ( id,
+cuenta_id );
+
+CREATE TABLE usuario (
+    ntelefonico   VARCHAR2(10 CHAR) NOT NULL,
+    cedula        VARCHAR2(10 CHAR) NOT NULL,
+    nombre        unknown 
+--  ERROR: Datatype UNKNOWN is not allowed 
+   ,
+    apellido      CLOB,
+    email         CLOB,
+    cuenta_id     VARCHAR2(10 CHAR) NOT NULL
+);
+
+CREATE UNIQUE INDEX usuario__idx ON
+    usuario ( cuenta_id ASC );
+
+ALTER TABLE usuario ADD CONSTRAINT usuario_pk PRIMARY KEY ( ntelefonico );
+
+ALTER TABLE consultas
+    ADD CONSTRAINT consultas_cuenta_fk FOREIGN KEY ( cuenta_id )
+        REFERENCES cuenta ( id );
+
+ALTER TABLE cuenta
+    ADD CONSTRAINT cuenta_empresa_fk FOREIGN KEY ( empresa_nombre )
+        REFERENCES empresa ( nombre );
+
+ALTER TABLE cuenta
+    ADD CONSTRAINT cuenta_usuario_fk FOREIGN KEY ( usuario_ntelefonico )
+        REFERENCES usuario ( ntelefonico );
+
+ALTER TABLE recargar
+    ADD CONSTRAINT recargar_cuenta_fk FOREIGN KEY ( cuenta_id )
+        REFERENCES cuenta ( id );
+
+ALTER TABLE usuario
+    ADD CONSTRAINT usuario_cuenta_fk FOREIGN KEY ( cuenta_id )
+        REFERENCES cuenta ( id );
+
+
+
+-- Informe de Resumen de Oracle SQL Developer Data Modeler: 
+-- 
+-- CREATE TABLE                             5
+-- CREATE INDEX                             2
+-- ALTER TABLE                             10
+-- CREATE VIEW                              0
+-- ALTER VIEW                               0
+-- CREATE PACKAGE                           0
+-- CREATE PACKAGE BODY                      0
+-- CREATE PROCEDURE                         0
+-- CREATE FUNCTION                          0
+-- CREATE TRIGGER                           0
+-- ALTER TRIGGER                            0
+-- CREATE COLLECTION TYPE                   0
+-- CREATE STRUCTURED TYPE                   0
+-- CREATE STRUCTURED TYPE BODY              0
+-- CREATE CLUSTER                           0
+-- CREATE CONTEXT                           0
+-- CREATE DATABASE                          0
+-- CREATE DIMENSION                         0
+-- CREATE DIRECTORY                         0
+-- CREATE DISK GROUP                        0
+-- CREATE ROLE                              0
+-- CREATE ROLLBACK SEGMENT                  0
+-- CREATE SEQUENCE                          0
+-- CREATE MATERIALIZED VIEW                 0
+-- CREATE SYNONYM                           0
+-- CREATE TABLESPACE                        0
+-- CREATE USER                              0
+-- 
+-- DROP TABLESPACE                          0
+-- DROP DATABASE                            0
+-- 
+-- REDACTION POLICY                         0
+-- 
+-- ORDS DROP SCHEMA                         0
+-- ORDS ENABLE SCHEMA                       0
+-- ORDS ENABLE OBJECT                       0
+-- 
+-- ERRORS                                   2
+-- WARNINGS                                 0
